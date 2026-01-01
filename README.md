@@ -1,11 +1,11 @@
 # CRIME IN INDIA: TEMPORAL TRENDS, SPATIAL PATTERNS, AND INSTITUTIONAL CONTEXT (2001–2025)
 
 ## Overview
-This repository contains the source code and analytical workflow for the research paper titled:
+This repository contains the source code and analytical workflow supporting a research study on crime trends in India over the period 2001–2025.
 
-**“CRIME IN INDIA: TEMPORAL TRENDS, SPATIAL PATTERNS, AND INSTITUTIONAL CONTEXT (2001–2025)”**
+The work focuses on temporal patterns, spatial distribution, and institutional contextual analysis using publicly available and secondary datasets.
 
-The study examines long-term crime trends in India using temporal analysis, spatial visualization, and institutional context-based interpretation over the period 2001–2025.
+This repository is intended to support transparency, reproducibility, and methodological clarity. Final interpretations and conclusions are presented in the associated research publication.
 
 ---
 
