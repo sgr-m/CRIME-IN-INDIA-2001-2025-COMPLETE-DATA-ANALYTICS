@@ -22,13 +22,24 @@ Only processed and aggregated data suitable for reproducibility are shared.
 ---
 
 ## Methodology
-The research methodology involves:
-1. Data cleaning and preprocessing
-2. Exploratory Data Analysis (EDA)
-3. Temporal trend analysis (year-wise and period-wise)
-4. Spatial analysis using GIS-based mapping
-5. Statistical modeling and interpretation
-6. Visualization using Python libraries and Power BI
+The study adopts a multi-stage crime analytics framework integrating temporal, spatial, and institutional perspectives.
+
+The methodology consists of:
+1. Data collection from official and secondary sources
+2. Data cleaning, harmonization, and aggregation at state and year levels
+3. Exploratory data analysis (EDA) to identify preliminary patterns
+4. Temporal trend analysis to examine long-term crime dynamics
+5. Spatial analysis using GIS-based state-wise mapping
+6. Institutional analysis incorporating judicial and governance indicators
+7. Visualization and interpretation using Python libraries and Power BI
+
+The complete analytical workflow is illustrated in the research methodology framework.
+
+### Research Methodology Framework
+
+![Crime Analytics Methodology Framework](assets/Crime_Analytics_Methodology_Framework.svg)
+
+The figure presents the integrated research framework employed for analyzing crime trends in India, covering data sources, preprocessing stages, analytical dimensions, and visualization outputs.
 
 ---
 
