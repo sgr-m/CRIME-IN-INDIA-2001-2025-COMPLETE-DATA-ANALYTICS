@@ -38,13 +38,13 @@ CRIME-IN-INDIA-2001-2025/
 ├── assets/                  # Figures, images, supplementary files
 ├── figures/                 # Generated plots, charts
 ├── notebooks/               # Jupyter notebooks
-│   ├── Filtereddata/        # Processed datasets for reproducibility
-│      └── FilteredData/
-│      └── GeoJson-Data-of-Indian-States-master/  # GeoJSON files for Indian states
+│   ├── Filtereddata/        # Processed datasets for reproducibility      
+│   │       └── 2020_to_2024/
+│   │       └── Year_2025_Month_Wise/
+│   └── GeoJson-Data-of-Indian-States-master/
 ├── powerbi/                 # Power BI dashboards and PBIX files
 └── README.md                # This file
 ```
----
 
 ## Reproducibility
 To reproduce the analysis:
