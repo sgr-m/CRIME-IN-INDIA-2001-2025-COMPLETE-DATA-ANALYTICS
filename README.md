@@ -33,13 +33,16 @@ The research methodology involves:
 ---
 
 ## Repository Structure
+
 CRIME-IN-INDIA-2001-2025/
-├── Assets/
-├── PowerBi/
-├── Python Notebooks/
-│ ├── FilteredData/
-│ └── GeoJson-Data-of-Indian-States-master/
-└── README.md
+├── assets/                  # Figures, images, supplementary files
+├── figures/                 # Generated plots, charts
+├── notebooks/               # Jupyter notebooks
+│   ├── Filtereddata/        # Processed datasets for reproducibility
+│   │   └── FilteredData/
+│   └── geojson_states/      # GeoJSON files for Indian states
+├── powerbi/                 # Power BI dashboards and PBIX files
+└── README.md                # This file
 
 ---
 
