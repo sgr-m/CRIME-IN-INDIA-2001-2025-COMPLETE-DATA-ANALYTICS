@@ -42,7 +42,23 @@ The complete analytical workflow is illustrated in the research methodology fram
 The figure presents the integrated research framework employed for analyzing crime trends in India, covering data sources, preprocessing stages, analytical dimensions, and visualization outputs.
 
 ---
+## Power BI Analytical Dashboards
 
+### Dashboard 1: Crime Analysis Overview (2001–2025)
+![Crime Analysis Overview](assets/powerbi_dashboard_01_overview.jpg)
+
+### Dashboard 2: Crime Against Women
+![Crime Against Women](assets/powerbi_dashboard_02_crime_against_women.jpg)
+
+### Dashboard 3: Police Response and Crime Resolution
+![Police Response](assets/powerbi_dashboard_03_police_response.jpg)
+
+### Dashboard 4: Justice Capacity and Crime Load
+![Justice Capacity](assets/powerbi_dashboard_04_justice_capacity.jpg)
+
+> Dashboard visuals are based on aggregated and anonymized data and are presented for academic and illustrative purposes only.
+
+---
 ## Repository Structure
 ```
 CRIME-IN-INDIA-2001-2025/
