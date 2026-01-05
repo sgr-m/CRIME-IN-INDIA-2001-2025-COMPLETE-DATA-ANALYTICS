@@ -103,4 +103,4 @@ Researcher – Political Science & Institutional Analysis
 ---
 
 ## Citation
-If you use this code, please cite the associated research paper once published.
+Maindola, S., & Doodraj, P. (2026). CRIME IN INDIA: Temporal trends, spatial patterns, and institutional context (2001–2025). *IJCRT*. Advance online publication.
