@@ -103,4 +103,4 @@ Researcher – Political Science & Institutional Analysis
 ---
 
 ## Citation
-Maindola, S., & Doodraj, P. (2026). CRIME IN INDIA: Temporal trends, spatial patterns, and institutional context (2001–2025). *IJCRT*. Advance online publication.
+SAGAR MAINDOLA,  PRERNA DOODRAJ,   "CRIME IN INDIA: TEMPORAL TRENDS, SPATIAL PATTERNS, AND INSTITUTIONAL CONTEXT (2001-2025)", International Journal of Creative Research Thoughts (IJCRT), ISSN:2320-2882, Volume.14, Issue 1, pp.a373-a383, January 2026, Available at :http://www.ijcrt.org/papers/IJCRT2601049.pdf
