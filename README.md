@@ -63,23 +63,34 @@ The figure presents the integrated research framework employed for analyzing cri
 ```
 CRIME-IN-INDIA-2001-2025/
 ├── assets/                  # Figures, images, supplementary files
+├── dashboard/               # Interactive web-based analytics dashboard (HTML/JS/CSS)
 ├── figures/                 # Generated plots, charts
 ├── notebooks/               # Jupyter notebooks
-│   ├── Filtereddata/        # Processed datasets for reproducibility      
-│   │       └── 2020_to_2024/
-│   │       └── Year_2025_Month_Wise/
-│   └── GeoJson-Data-of-Indian-States-master/
+│   ├── FilteredData/        # Processed datasets for reproducibility      
+│   │   ├── 2020_to_2024/
+│   │   └── Year_2025_Month_Wise/
+│   ├── GeoJson-Data-of-Indian-States-master/
+│   └── Raw Datasets/        # Original raw crime and supportive datasets
 ├── powerbi/                 # Power BI dashboards and PBIX files
+├── src/                     # Python source code for data filtration
+├── main.py                  # Main execution script
+├── requirements.txt         # Project dependencies
 └── README.md                # This file
 ```
 
-## Reproducibility
+## Reproducibility & Execution
+
+### 1. Data Analysis (Jupyter Notebooks)
 To reproduce the analysis:
 1. Clone this repository
-2. Install required Python libraries
+2. Install required Python libraries (see `requirements.txt`)
 3. Run the Jupyter notebooks in logical sequence
 
-Detailed dependency information will be provided in `requirements.txt`.
+### 2. Interactive Web Dashboard
+To view the custom HTML/JS interactive dashboard locally:
+1. Open a terminal in the root directory
+2. Start a local web server: `python -m http.server 8000`
+3. Open your web browser and navigate to: `http://localhost:8000/dashboard/`
 
 ---
 

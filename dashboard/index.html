@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Analytics Dashboard | India (2001-2025)</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <h2>Crime Analytics</h2>
+                <p>India (2001-2025)</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-tab="overview">
+                    <span class="icon">📊</span> Overview (2001-2025)
+                </a>
+                <a href="#women" class="nav-item" data-tab="women">
+                    <span class="icon">🛡️</span> Crimes Against Women
+                </a>
+                <a href="#police" class="nav-item" data-tab="police">
+                    <span class="icon">🚓</span> Police Response
+                </a>
+                <a href="#justice" class="nav-item" data-tab="justice">
+                    <span class="icon">⚖️</span> Justice Capacity
+                </a>
+            </nav>
+
+            <div class="filters">
+                <h3>Global Filters</h3>
+                <div class="filter-group">
+                    <label for="stateFilter">State / UT</label>
+                    <select id="stateFilter">
+                        <option value="ALL">All India</option>
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="sidebar-footer"
+                style="margin-top: 24px; font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
+                <button id="theme-toggle" class="theme-toggle-btn">🌓 Toggle Theme</button>
+                <p style="margin-top: 16px;">Report by <strong>Sagar Maindola</strong></p>
+                <a href="https://github.com/sgr-m/CRIME-IN-INDIA-2001-2025-COMPLETE-DATA-ANALYTICS" target="_blank"
+                    style="color: var(--accent-blue); text-decoration: none; margin-top: 8px; display: inline-block;">View
+                    on GitHub</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <div class="tab-header">
+                <h1 id="tab-title" class="gradient-text">Overview (2001-2025)</h1>
+                <p id="tab-subtitle">Comprehensive analysis of crime trends across India.</p>
+            </div>
+
+            <!-- KPIs Header (Dynamic) -->
+            <header class="kpi-container" id="kpi-container">
+                <!-- KPIs injected via JS -->
+            </header>
+
+            <!-- Insights / Report Section -->
+            <div class="report-section glass-panel fade-in" id="report-section">
+                <h3 id="report-title" class="gradient-text" style="font-size: 1.2rem; margin-bottom: 8px;">Key Insights
+                </h3>
+                <div id="report-content" style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;">
+                    <!-- Report injected via JS -->
+                </div>
+            </div>
+
+            <!-- Dashboard Grid (Dynamic) -->
+            <div class="dashboard-grid" id="chart-container">
+                <!-- Charts injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/dataLoader.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

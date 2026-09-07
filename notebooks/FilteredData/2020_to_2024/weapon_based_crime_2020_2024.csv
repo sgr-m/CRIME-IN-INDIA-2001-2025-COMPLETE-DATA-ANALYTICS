@@ -1,8 +1,8 @@
-,weapon_used,total_cases
-0,Blunt Object,5737
-1,Explosives,5751
-2,Firearm,5643
-3,Knife,5835
-4,Other,5676
-5,Poison,5728
-6,UNKNOWN,5790
+weapon_used,total_cases
+Blunt Object,5737
+Explosives,5751
+Firearm,5643
+Knife,5835
+Other,5676
+Poison,5728
+UNKNOWN,5790
