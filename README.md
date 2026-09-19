@@ -7,6 +7,10 @@ The work focuses on temporal patterns, spatial distribution, and institutional c
 
 This repository is intended to support transparency, reproducibility, and methodological clarity. Final interpretations and conclusions are presented in the associated research publication.
 
+## Interactive Dashboard
+
+Explore the live dashboard: [Crime Intelligence India Dashboard](https://sgr-m.github.io/CRIME-IN-INDIA-2001-2025-COMPLETE-DATA-ANALYTICS/dashboard/)
+
 ---
 
 ## Data Sources
