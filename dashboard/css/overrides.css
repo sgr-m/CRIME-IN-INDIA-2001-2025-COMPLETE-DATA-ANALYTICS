@@ -1,0 +1,5 @@
+.dashboard-toolbar[hidden],
+.kpi-container[hidden],
+.report-section[hidden] {
+    display: none;
+}

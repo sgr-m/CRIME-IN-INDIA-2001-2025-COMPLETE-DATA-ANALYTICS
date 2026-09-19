@@ -19,6 +19,10 @@ class DataLoader {
                 dynamicTyping: true,
                 skipEmptyLines: true,
                 complete: (results) => {
+                    if (results.errors?.length) {
+                        reject(new Error(results.errors.map(error => error.message).join(', ')));
+                        return;
+                    }
                     this.cache[url] = results.data;
                     resolve(results.data);
                 },

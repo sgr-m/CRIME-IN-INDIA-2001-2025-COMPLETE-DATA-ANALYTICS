@@ -21,9 +21,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const kpiContainer = document.getElementById('kpi-container');
     const tabTitle = document.getElementById('tab-title');
     const tabSubtitle = document.getElementById('tab-subtitle');
+    const dataStatus = document.getElementById('data-status');
+    const topNav = document.getElementById('top-nav');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const navBackdrop = document.getElementById('nav-backdrop');
+    const dashboardToolbar = document.getElementById('dashboard-toolbar');
+    const reportSection = document.getElementById('report-section');
+    const filterNote = document.getElementById('filter-note');
+    const exportButton = document.getElementById('export-data');
+
+    const sources = [
+        ['NCRB Crime in India', 'National Crime Records Bureau', 'Annual IPC crime statistics and state tables', 'https://ncrb.gov.in/crime-in-india-addtional-table'],
+        ['NCRB Crime Against Women', 'National Crime Records Bureau', 'Women-specific crime statistics and annual reports', 'https://ncrb.gov.in/crime-in-india-addtional-table'],
+        ['NCRB Open Government Data', 'Open Government Data Platform India', 'Published NCRB datasets and data catalogues', 'https://www.data.gov.in/'],
+        ['Census of India 2011', 'Office of the Registrar General & Census Commissioner', 'Population, literacy and district-level census tables', 'https://censusindia.gov.in/census.website/data/census-tables'],
+        ['National Judicial Data Grid', 'e-Committee, Supreme Court of India', 'Court establishment, caseload and disposal statistics', 'https://njdg.ecourts.gov.in/'],
+        ['eCourts Services', 'Department of Justice, Government of India', 'Court infrastructure and eCourts service information', 'https://ecourts.gov.in/']
+    ];
+
+    const number = (value) => Number.isFinite(Number(value)) ? Number(value) : 0;
 
     // Utility: Format Numbers
     function formatNumber(num) {
+        num = number(num);
         if (!num) return '0';
         if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
         if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
@@ -39,6 +59,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
         `;
     }
+
+    function setStatus(message, loading = false) {
+        dataStatus.innerHTML = `<span class="status-dot ${loading ? 'is-loading' : ''}"></span>${message}`;
+    }
+
+    function toggleMenu(force) {
+        const open = force ?? !topNav.classList.contains('is-open');
+        topNav.classList.toggle('is-open', open);
+        navBackdrop.hidden = !open;
+        mobileMenuButton.setAttribute('aria-expanded', String(open));
+    }
+
+    mobileMenuButton.addEventListener('click', () => toggleMenu());
+    navBackdrop.addEventListener('click', () => toggleMenu(false));
+
+    exportButton.addEventListener('click', () => {
+        const data = state.activeTab === 'overview' ? state.datasets.overview :
+            state.activeTab === 'women' ? state.datasets.women :
+            state.activeTab === 'police' ? state.datasets.detailedPolice : state.datasets.justice;
+        const scoped = state.filterState === 'ALL' || state.activeTab === 'police' ? data : data.filter(row => row.state_ut === state.filterState);
+        if (!scoped.length) return;
+        const csv = Papa.unparse(scoped);
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+        link.download = `${state.activeTab}-${state.filterState.toLowerCase().replaceAll(' ', '-')}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    });
 
     // Load initial data
     try {
@@ -62,6 +110,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 navItems.forEach(n => n.classList.remove('active'));
                 item.classList.add('active');
                 state.activeTab = item.dataset.tab;
+                history.replaceState(null, '', `#${state.activeTab}`);
+                toggleMenu(false);
                 await loadAndRenderTab();
             });
         });
@@ -95,16 +145,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderCurrentTab(); // Re-render to apply new colors to charts
         });
 
+        const initialTab = location.hash.slice(1);
+        if ([...navItems].some(item => item.dataset.tab === initialTab)) {
+            document.querySelector(`[data-tab="${initialTab}"]`).click();
+            return;
+        }
+
         // Initial render
         await loadAndRenderTab();
 
     } catch(err) {
         console.error("Initialization error:", err);
-        kpiContainer.innerHTML = `<h3 style="color:var(--accent-rose)">Error Loading Data. Ensure local HTTP server is running.</h3>`;
+        setStatus('Unable to load data');
+        kpiContainer.innerHTML = `<div class="error-state"><strong>We couldn’t load the dashboard data.</strong><span>Start a local server from the project root, then refresh this page.</span></div>`;
     }
 
 
     async function loadAndRenderTab() {
+        setStatus('Loading data', true);
         // Fetch data if not cached
         if(state.activeTab === 'women' && state.datasets.women.length === 0) {
             state.datasets.women = await window.dataLoader.loadWomenCrimeData();
@@ -122,6 +180,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         renderCurrentTab();
+        setStatus('Data ready');
     }
 
 
@@ -130,9 +189,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         kpiContainer.innerHTML = '';
         
         const filter = state.filterState;
+        const isSources = state.activeTab === 'sources';
+        const supportsStateFilter = state.activeTab !== 'police' && !isSources;
+        stateSelect.disabled = !supportsStateFilter;
+        stateSelect.previousElementSibling.textContent = supportsStateFilter ? 'Focus area' : 'Focus area (not applicable)';
+        dashboardToolbar.hidden = isSources;
+        kpiContainer.hidden = isSources;
+        reportSection.hidden = isSources;
+        filterNote.textContent = state.filterState === 'ALL' ? 'Showing consolidated records' : `Showing ${state.filterState}`;
 
         if (state.activeTab === 'overview') {
-            tabTitle.textContent = 'Overview (2001-2025)';
+            tabTitle.textContent = 'Overview';
             tabSubtitle.textContent = 'Comprehensive analysis of crime trends across India.';
             renderOverview(filter);
         } 
@@ -151,6 +218,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             tabSubtitle.textContent = 'Analysis of court infrastructure and judicial capacity (2025).';
             renderJustice();
         }
+        else if (isSources) {
+            tabTitle.textContent = 'Data sources';
+            tabSubtitle.textContent = 'Direct links to the official institutions and public platforms used in this study.';
+            renderSources();
+        }
+    }
+
+    function renderSources() {
+        document.getElementById('chart-container').innerHTML = `
+            <article class="chart-card sources-card">
+                <h3>Official source directory</h3>
+                <p class="chart-insight">Search by dataset, institution, or topic. Links open the relevant official source in a new tab.</p>
+                <input id="source-search" class="source-search" type="search" placeholder="Search data sources" aria-label="Search data sources">
+                <div class="table-wrap"><table class="source-table"><thead><tr><th>Dataset / service</th><th>Publisher</th><th>Coverage</th><th>Link</th></tr></thead><tbody id="sources-body"></tbody></table></div>
+                <p id="source-count" class="source-count"></p>
+            </article>`;
+        const body = document.getElementById('sources-body');
+        const count = document.getElementById('source-count');
+        const draw = (query = '') => {
+            const visible = sources.filter(source => source.slice(0, 3).join(' ').toLowerCase().includes(query.toLowerCase()));
+            body.innerHTML = visible.map(([name, owner, coverage, url]) => `<tr><td>${name}</td><td>${owner}</td><td>${coverage}</td><td><a href="${url}" target="_blank" rel="noopener noreferrer">Visit source ↗</a></td></tr>`).join('');
+            count.textContent = `${visible.length} of ${sources.length} official sources shown`;
+        };
+        draw();
+        document.getElementById('source-search').addEventListener('input', event => draw(event.target.value));
     }
 
 
@@ -160,13 +252,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         let data = state.datasets.overview.filter(row => row.state_ut && row.year);
         if (filter !== 'ALL') data = data.filter(d => d.state_ut === filter);
 
-        const totalCrimes = data.reduce((s, r) => s + (r.total_ipc_crimes || 0), 0);
+        const totalCrimes = data.reduce((s, r) => s + number(r.total_ipc_crimes), 0);
         const totalStates = new Set(data.map(r => r.state_ut)).size;
         const years = [...new Set(data.map(r => r.year))].sort();
 
-        const violent = data.reduce((s, r) => s + (r.voilent_crime_total || 0), 0);
-        const property = data.reduce((s, r) => s + (r.property_crime_total || 0), 0);
-        const womenCrimes = data.reduce((s, r) => s + (r.women_crime_total || 0), 0);
+        const violent = data.reduce((s, r) => s + number(r.voilent_crime_total), 0);
+        const property = data.reduce((s, r) => s + number(r.property_crime_total), 0);
+        const womenCrimes = data.reduce((s, r) => s + number(r.women_crime_total), 0);
 
         // KPIs
         kpiContainer.innerHTML = `
@@ -178,8 +270,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Trend Chart
         const yearMap = {};
-        data.forEach(r => yearMap[r.year] = (yearMap[r.year] || 0) + (r.total_ipc_crimes || 0));
-        const sortedYears = Object.keys(yearMap).sort();
+        data.forEach(r => yearMap[r.year] = (yearMap[r.year] || 0) + number(r.total_ipc_crimes));
+        const sortedYears = Object.keys(yearMap).sort((a, b) => Number(a) - Number(b));
         window.dashboardCharts.renderTrendChart(
             sortedYears.map(y => yearMap[y]), 
             sortedYears,
@@ -188,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Top States
         const stateMap = {};
-        data.forEach(r => { stateMap[r.state_ut] = (stateMap[r.state_ut] || 0) + (r.total_ipc_crimes || 0); });
+        data.forEach(r => { stateMap[r.state_ut] = (stateMap[r.state_ut] || 0) + number(r.total_ipc_crimes); });
         const topStates = Object.entries(stateMap).sort((a, b) => b[1] - a[1]).slice(0, 10);
         window.dashboardCharts.renderTopStatesChart(
             topStates.map(x => x[1]), 
@@ -201,7 +293,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
 
         // Basis of Crimes
-        const economic = data.reduce((s, r) => s + (r.economic_crime_total || 0), 0);
+        const economic = data.reduce((s, r) => s + number(r.economic_crime_total), 0);
         window.dashboardCharts.renderDoughnutChart(
             [violent, womenCrimes, property, economic], 
             ['Violent', 'Women', 'Property', 'Economic'], 
@@ -223,18 +315,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (filter !== 'ALL') data = data.filter(d => d.state_ut === filter);
 
         const totalWomenCrimes = data.reduce((s, r) => s + 
-            (r.rape||0) + 
-            (r.dowry_deaths||0) + 
-            (r.cruelty_by_husband_or_his_relatives||0) + 
-            (r.assault_on_women_with_intent_to_outrage_her_modesty||0) + 
-            (r.insult_to_modesty_of_women||0) +
-            (r.kidnapping_and_abduction_of_women_and_girls||0) +
-            (r.importation_of_girls_from_foreign_countries||0), 0);
+            number(r.rape) + number(r.dowry_deaths) + number(r.cruelty_by_husband_or_his_relatives) + number(r.assault_on_women_with_intent_to_outrage_her_modesty) + number(r.insult_to_modesty_of_women) + number(r.kidnapping_and_abduction_of_women_and_girls) + number(r.importation_of_girls_from_foreign_countries), 0);
 
-        const totalRape = data.reduce((s, r) => s + (r.rape||0), 0);
-        const custodialRape = data.reduce((s, r) => s + (r.custodial_rape||0), 0);
-        const dowry = data.reduce((s, r) => s + (r.dowry_deaths||0), 0);
-        const trafficking = data.reduce((s, r) => s + (r.importation_of_girls_from_foreign_countries||0), 0);
+        const totalRape = data.reduce((s, r) => s + number(r.rape), 0);
+        const custodialRape = data.reduce((s, r) => s + number(r.custodial_rape), 0);
+        const dowry = data.reduce((s, r) => s + number(r.dowry_deaths), 0);
+        const trafficking = data.reduce((s, r) => s + number(r.importation_of_girls_from_foreign_countries), 0);
 
         // KPIs
         kpiContainer.innerHTML = `
@@ -398,7 +484,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function renderJustice() {
-        const data = state.datasets.justice.filter(row => row.state_ut);
+        let data = state.datasets.justice.filter(row => row.state_ut);
+        if (state.filterState !== 'ALL') data = data.filter(row => row.state_ut === state.filterState);
 
         const totalJudges = data.reduce((s, r) => s + (r.working_judges||0), 0);
         const totalCourts = data.reduce((s, r) => s + (r.total_courts||0), 0);
@@ -417,7 +504,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dualLabels = data.map(r => r.state_ut);
         window.dashboardCharts.renderDualAxisChart(
             dualLabels, 
-            data.map(r => r.total_cases), 
+            data.map(r => number(r.total_cases_db)),
             data.map(r => r.working_judges), 
             'Crime Load', 
             'Judicial Capacity', 

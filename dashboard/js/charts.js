@@ -1,9 +1,9 @@
 // js/charts.js
 
-Chart.register(ChartDataLabels);
+if (window.ChartDataLabels) Chart.register(ChartDataLabels);
 
 Chart.defaults.color = '#94A3B8';
-Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 23, 42, 0.9)';
 Chart.defaults.plugins.tooltip.titleColor = '#F8FAFC';
 Chart.defaults.plugins.tooltip.bodyColor = '#F8FAFC';
@@ -13,9 +13,11 @@ Chart.defaults.plugins.tooltip.borderColor = 'rgba(255,255,255,0.1)';
 Chart.defaults.plugins.tooltip.borderWidth = 1;
 
 // Configure global datalabels defaults
-Chart.defaults.plugins.datalabels.display = false; // Off by default, enabled per chart
-Chart.defaults.plugins.datalabels.color = function(context) { return Chart.defaults.color; };
-Chart.defaults.plugins.datalabels.font = { weight: 'bold', size: 10 };
+if (Chart.defaults.plugins.datalabels) {
+    Chart.defaults.plugins.datalabels.display = false;
+    Chart.defaults.plugins.datalabels.color = () => Chart.defaults.color;
+    Chart.defaults.plugins.datalabels.font = { weight: 'bold', size: 10 };
+}
 
 class DashboardCharts {
     constructor() {
@@ -34,21 +36,34 @@ class DashboardCharts {
     createChartCard(title, spanFull = false, insightText = '') {
         const card = document.createElement('div');
         card.className = `chart-card glass-panel fade-in ${spanFull ? 'span-2' : ''}`;
-        
-        card.innerHTML = `
-            <h3>${title}</h3>
-            ${insightText ? `<p class="chart-insight" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.4;">${insightText}</p>` : ''}
-            <div class="chart-body">
-                <canvas></canvas>
-            </div>
-        `;
+        const heading = document.createElement('h3');
+        heading.textContent = title;
+        card.appendChild(heading);
+        if (insightText) {
+            const insight = document.createElement('p');
+            insight.className = 'chart-insight';
+            insight.textContent = insightText;
+            card.appendChild(insight);
+        }
+        const body = document.createElement('div');
+        body.className = 'chart-body';
+        const canvas = document.createElement('canvas');
+        canvas.setAttribute('role', 'img');
+        canvas.setAttribute('aria-label', title);
+        body.appendChild(canvas);
+        card.appendChild(body);
         document.getElementById('chart-container').appendChild(card);
-        return card.querySelector('canvas').getContext('2d');
+        return canvas.getContext('2d');
     }
 
     formatYAxis(value) {
         return value >= 1e6 ? (value/1e6).toFixed(1) + 'M' : 
                value >= 1e3 ? (value/1e3).toFixed(1) + 'K' : value;
+    }
+
+    safeMax(values) {
+        const max = Math.max(0, ...values.map(value => Number(value) || 0));
+        return max ? max * 1.15 : 1;
     }
 
     // --- SHARED CHARTS ---
@@ -121,7 +136,7 @@ class DashboardCharts {
                     x: { 
                         grid: { color: 'rgba(150, 150, 150, 0.1)' },
                         ticks: { callback: this.formatYAxis },
-                        suggestedMax: Math.max(...data) * 1.15
+                        suggestedMax: this.safeMax(data)
                     },
                     y: { grid: { display: false } }
                 }
@@ -205,7 +220,7 @@ class DashboardCharts {
                     y: { 
                         grid: { color: 'rgba(150, 150, 150, 0.1)' },
                         ticks: { callback: this.formatYAxis },
-                        suggestedMax: Math.max(...data1, ...data2) * 1.15
+                        suggestedMax: this.safeMax([...data1, ...data2])
                     }
                 }
             }
@@ -248,7 +263,7 @@ class DashboardCharts {
                         stacked: true,
                         grid: { color: 'rgba(150, 150, 150, 0.1)' },
                         ticks: { callback: this.formatYAxis },
-                        suggestedMax: Math.max(...labels.map((_, i) => datasets.reduce((sum, ds) => sum + ds.data[i], 0))) * 1.15
+                        suggestedMax: this.safeMax(labels.map((_, i) => datasets.reduce((sum, ds) => sum + (Number(ds.data[i]) || 0), 0)))
                     }
                 }
             }
