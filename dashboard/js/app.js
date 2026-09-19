@@ -31,12 +31,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const exportButton = document.getElementById('export-data');
 
     const sources = [
+        ['Crime in India 2022', 'Open Government Data Platform India / NCRB', 'NCRB Crime in India report catalogue', 'https://www.data.gov.in/catalog/crime-india-2022'],
+        ['Open Government Data Platform', 'Government of India', 'Government crime-statistics service directory', 'https://services.india.gov.in/service/detail/open-government-data-platform-india-1'],
+        ['IPC Crimes by State/UT (2020–2022)', 'Open Government Data Platform India / NCRB', 'NCRB Table 1A.1', 'https://www.data.gov.in/resource/stateut-wise-number-indian-penal-code-ipc-crimes-2020-2022'],
+        ['Crime Review for the Year 2025', 'Open Government Data Platform India', 'Monthly crime review data catalogue', 'https://www.data.gov.in/catalog/crime-reveiw-year-2025'],
         ['NCRB Crime in India', 'National Crime Records Bureau', 'Annual IPC crime statistics and state tables', 'https://ncrb.gov.in/crime-in-india-addtional-table'],
-        ['NCRB Crime Against Women', 'National Crime Records Bureau', 'Women-specific crime statistics and annual reports', 'https://ncrb.gov.in/crime-in-india-addtional-table'],
-        ['NCRB Open Government Data', 'Open Government Data Platform India', 'Published NCRB datasets and data catalogues', 'https://www.data.gov.in/'],
-        ['Census of India 2011', 'Office of the Registrar General & Census Commissioner', 'Population, literacy and district-level census tables', 'https://censusindia.gov.in/census.website/data/census-tables'],
-        ['National Judicial Data Grid', 'e-Committee, Supreme Court of India', 'Court establishment, caseload and disposal statistics', 'https://njdg.ecourts.gov.in/'],
-        ['eCourts Services', 'Department of Justice, Government of India', 'Court infrastructure and eCourts service information', 'https://ecourts.gov.in/']
+        ['National Judicial Data Grid', 'e-Committee, Supreme Court of India', 'Court summary and judge-count reports', 'https://njdg.ecourts.gov.in/njdg_v3/'],
+        ['State-wise Literacy Rates (1951–2001)', 'Government of India Economic Survey', 'Historical literacy-rate table', 'https://www.indiabudget.gov.in/budget_archive/es2006-07/chapt2007/tab94.pdf'],
+        ['Community-wise Population (DDW00C-01)', 'Census of India', 'Community-wise census population catalogue', 'https://censusindia.gov.in/nada/index.php/catalog/11361'],
+        ['Literacy Rate in India, State-wise to 2011', 'Open Government Data Platform India', 'State-level literacy-rate resource', 'https://www.data.gov.in/resource/literacy-rate-india-state-wise-upto-2011'],
+        ['State-wise Unemployment Rates, Table 18.1', 'Ministry of Statistics and Programme Implementation', 'PLFS annual report workbook', 'https://www.mospi.gov.in/sites/default/files/publication_reports/PLFS_AR23-24/Table_18.1.xlsx'],
+        ['Census of India Tables', 'Registrar General & Census Commissioner', 'Population, literacy and district-level census tables', 'https://censusindia.gov.in/census.website/data/census-tables'],
+        ['Crime in India 2022: State, City & Category', 'OpenCity', 'State, city and category breakdowns', 'https://data.opencity.in/dataset/crime-in-india-2022'],
+        ['NCRB Reports Catalogue', 'Dataful', 'Annual and state/city-level NCRB datasets', 'https://dataful.in/datasets/?q=NCRB+reports'],
+        ['Indian Crimes Dataset (2020–2024)', 'Kaggle / Sudhanva HG', 'Multi-city crime reports; CSV', 'https://www.kaggle.com/datasets/sudhanvahg/indian-crimes-dataset'],
+        ['Crimes in India (2001–2023)', 'Kaggle / Umesh Chandra', 'Multi-year Crimes_in_india_2001-2023_synthetic.csv', 'https://www.kaggle.com/datasets/umeshchandra789/crimes-in-india'],
+        ['Crimes Against Women (2001–2021)', 'Kaggle / Balaji Varaprasad', 'CrimesOnWomenData.csv', 'https://www.kaggle.com/datasets/balajivaraprasad/crimes-against-women-in-india-2001-2021'],
+        ['Crime Against Women (2001–2022)', 'Mendeley Data', 'NCRB longitudinal women-crime statistics', 'https://data.mendeley.com/datasets/dg9k2nyckk/2'],
+        ['Current Indian Chief Ministers', 'Wikipedia', 'State ruling-party contextual reference', 'https://en.wikipedia.org/wiki/List_of_current_Indian_chief_ministers'],
+        ['State Census 2011 Filtered Data', 'OpenDataBay', 'State-level census data reference', 'https://www.opendatabay.com/data/ai-ml/992e0c11-00f9-46d7-9ade-9bf4fa72ff86']
     ];
 
     const number = (value) => Number.isFinite(Number(value)) ? Number(value) : 0;
